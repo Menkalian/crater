@@ -1,0 +1,14 @@
+.gradle
+**/build
+local.properties
+
+**/.data
+**/.logs
+**/.sqlite
+
+.idea
+**/*.iml
+
+client-web/frontend/generated
+client-web/node_modules
+client-web/webpack.generated.js
