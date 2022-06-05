@@ -2,6 +2,7 @@ package de.menkalian.crater.restclient.logger
 
 import org.slf4j.LoggerFactory
 
+@Suppress("unused")
 class Slf4jLogger(val logger: org.slf4j.Logger) : Logger {
     constructor(loggerName: String = "DracoClient") : this(LoggerFactory.getLogger(loggerName))
 

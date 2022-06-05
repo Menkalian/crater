@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
 @Suppress("unused")
-class CraterClient(private val httpClientTemplate: HttpClient, private val configuration: CraterClientConfiguration) : ICraterClient {
+class CraterClient(httpClientTemplate: HttpClient, private val configuration: CraterClientConfiguration) : ICraterClient {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val httpClient: HttpClient
 
