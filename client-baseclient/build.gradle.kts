@@ -29,8 +29,17 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
+                api(ktor("client-cio"))
                 implementation(ktor("client-cio"))
+                api("org.slf4j:slf4j-api:1.7.36")
                 implementation("org.slf4j:slf4j-api:1.7.36")
+
+                api(ktor("client-core"))
+                api(ktor("client-serialization"))
+                api(ktor("client-logging"))
+                api(ktor("client-websockets"))
+
+                api(project(":shared-data"))
             }
         }
         val nativeMain by getting {
@@ -38,19 +47,5 @@ kotlin {
                 implementation(ktor("client-curl"))
             }
         }
-    }
-}
-
-afterEvaluate {
-    // Build fat jar, since transitive dependencies do not work properly at the moment
-    tasks.getByName("jvmJar", Jar::class) {
-        from(
-            configurations
-                .getByName("jvmRuntimeClasspath")
-                .map { if (it.isDirectory) it else zipTree(it) }
-        )
-    }
-
-    publishing {
     }
 }

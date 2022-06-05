@@ -18,7 +18,7 @@ plugins {
 
 allprojects {
     group = "de.menkalian.crater"
-    version = "1.0.1"
+    version = "1.1.0"
 
     repositories {
         mavenCentral()
@@ -63,15 +63,22 @@ allprojects {
             sourceSets {
                 getByName("commonMain") {
                     dependencies {
+                        api(kotlin("stdlib-common"))
                         implementation(kotlin("stdlib-common"))
+                        api(kotlin("reflect"))
                         implementation(kotlin("reflect"))
 
                         // Include coroutines
+                        api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+                        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+                        api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
                         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
 
                         // Include serialization if the plugin is there
                         pluginManager.withPlugin("org.jetbrains.kotlin.plugin.serialization") {
+                            api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2")
                             implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2")
+                            api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
                             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
                         }
                     }

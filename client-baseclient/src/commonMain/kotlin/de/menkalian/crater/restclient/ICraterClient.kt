@@ -79,6 +79,22 @@ interface ICraterClient {
          */
         fun onCompleted(success: Boolean)
     }
+    /**
+     * Callback object for handling an error
+     */
+    fun interface ExceptionCallback {
+        /**
+         * Called when error occurs.
+         * **THIS IS NOT CALLED ON A SPECIFIC THREAD!**
+         *
+         * @param exception: Exception that occured
+         */
+        fun onError(exception: CraterException)
+    }
+
+    private object NoopExceptionCallback : ExceptionCallback {
+        override fun onError(exception: CraterException) {}
+    }
 
     /**
      * Checks whether the current content version is up to date with the server.
@@ -90,8 +106,7 @@ interface ICraterClient {
      *
      * @throws CraterException When there is a problem performing the action. Check [CraterException.error] to determine the source of the error.
      */
-    @Throws(CraterException::class)
-    fun checkUpToDate(currentDatabaseVersion: Long, callback: VersionCallback): Job
+    fun checkUpToDate(currentDatabaseVersion: Long, callback: VersionCallback, onError: ExceptionCallback = NoopExceptionCallback): Job
 
     /**
      * Retrieves the upstream content version from the server.
@@ -102,8 +117,7 @@ interface ICraterClient {
      *
      * @throws CraterException When there is a problem performing the action. Check [CraterException.error] to determine the source of the error.
      */
-    @Throws(CraterException::class)
-    fun getUpstreamVersion(callback: VersionCallback): Job
+    fun getUpstreamVersion(callback: VersionCallback, onError: ExceptionCallback = NoopExceptionCallback): Job
 
     /**
      * Retrieves the patch information for upgrading the desired version range
@@ -116,8 +130,7 @@ interface ICraterClient {
      *
      * @throws CraterException When there is a problem performing the action. Check [CraterException.error] to determine the source of the error.
      */
-    @Throws(CraterException::class)
-    fun getPatchChangeLogs(currentDatabaseVersion: Long, targetVersion: Long?, callback: ChangelogCallback): Job
+    fun getPatchChangeLogs(currentDatabaseVersion: Long, targetVersion: Long?, callback: ChangelogCallback, onError: ExceptionCallback = NoopExceptionCallback): Job
 
     /**
      * Saves the given task to the database
@@ -129,8 +142,7 @@ interface ICraterClient {
      *
      * @throws CraterException When there is a problem performing the action. Check [CraterException.error] to determine the source of the error.
      */
-    @Throws(CraterException::class)
-    fun saveTaskInUpstreamDatabase(task: Task, callback: TaskCallback): Job
+    fun saveTaskInUpstreamDatabase(task: Task, callback: TaskCallback, onError: ExceptionCallback = NoopExceptionCallback): Job
 
     /**
      * Queries the task with the given ID from the database
@@ -142,8 +154,7 @@ interface ICraterClient {
      *
      * @throws CraterException When there is a problem performing the action. Check [CraterException.error] to determine the source of the error.
      */
-    @Throws(CraterException::class)
-    fun getTask(id: Long, callback: TaskCallback): Job
+    fun getTask(id: Long, callback: TaskCallback, onError: ExceptionCallback = NoopExceptionCallback): Job
 
     /**
      * Queries all tasks from the database. Can be used to initialize the local database.
@@ -154,8 +165,7 @@ interface ICraterClient {
      *
      * @throws CraterException When there is a problem performing the action. Check [CraterException.error] to determine the source of the error.
      */
-    @Throws(CraterException::class)
-    fun getAllTasks(callback: TaskListCallback): Job
+    fun getAllTasks(callback: TaskListCallback, onError: ExceptionCallback = NoopExceptionCallback): Job
 
     /**
      * Remove the given task from the database
@@ -167,8 +177,7 @@ interface ICraterClient {
      *
      * @throws CraterException When there is a problem performing the action. Check [CraterException.error] to determine the source of the error.
      */
-    @Throws(CraterException::class)
-    fun removeTask(id: Long, callback: BooleanCallback): Job
+    fun removeTask(id: Long, callback: BooleanCallback, onError: ExceptionCallback = NoopExceptionCallback): Job
 
     /**
      * Upload a telemetrie report to the server
@@ -180,6 +189,5 @@ interface ICraterClient {
      *
      * @throws CraterException When there is a problem performing the action. Check [CraterException.error] to determine the source of the error.
      */
-    @Throws(CraterException::class)
-    fun uploadTelemetrieReport(report: TelemetrieReport, callback: BooleanCallback): Job
+    fun uploadTelemetrieReport(report: TelemetrieReport, callback: BooleanCallback, onError: ExceptionCallback = NoopExceptionCallback): Job
 }

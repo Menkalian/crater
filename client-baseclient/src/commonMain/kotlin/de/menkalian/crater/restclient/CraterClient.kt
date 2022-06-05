@@ -65,81 +65,82 @@ class CraterClient(httpClientTemplate: HttpClient, private val configuration: Cr
         }
     }
 
-    override fun checkUpToDate(currentDatabaseVersion: Long, callback: ICraterClient.VersionCallback): Job {
+    override fun checkUpToDate(currentDatabaseVersion: Long, callback: ICraterClient.VersionCallback, onError: ICraterClient.ExceptionCallback): Job {
         return version.getUpstreamVersion(
             onRead = { v ->
                 callback.onVersion(currentDatabaseVersion == v, v)
             },
-            onError = { throw CraterException(it) }
+            onError = { onError.onError(CraterException(it)) }
         )
     }
 
-    override fun getUpstreamVersion(callback: ICraterClient.VersionCallback): Job {
+    override fun getUpstreamVersion(callback: ICraterClient.VersionCallback, onError: ICraterClient.ExceptionCallback): Job {
         return version.getUpstreamVersion(
             onRead = { v ->
                 callback.onVersion(true, v)
             },
-            onError = { throw CraterException(it) }
+            onError = { onError.onError(CraterException(it)) }
         )
     }
 
-    override fun getPatchChangeLogs(currentDatabaseVersion: Long, targetVersion: Long?, callback: ICraterClient.ChangelogCallback): Job {
+    override fun getPatchChangeLogs(currentDatabaseVersion: Long, targetVersion: Long?, callback: ICraterClient.ChangelogCallback,
+                                    onError: ICraterClient.ExceptionCallback): Job {
         return version.getPatches(
             currentDatabaseVersion,
             targetVersion,
             onRead = { changes ->
                 callback.onChanges(changes.maxOfOrNull { it.newVersion } ?: 1, changes)
             },
-            onError = { throw CraterException(it) }
+            onError = { onError.onError(CraterException(it)) }
         )
     }
 
-    override fun saveTaskInUpstreamDatabase(task: Task, callback: ICraterClient.TaskCallback): Job {
+    override fun saveTaskInUpstreamDatabase(task: Task, callback: ICraterClient.TaskCallback, onError: ICraterClient.ExceptionCallback): Job {
         return this.task.create(
             task,
             onCreated = {
                 callback.onTask(it)
             },
-            onError = { throw CraterException(it) }
+            onError = { onError.onError(CraterException(it)) }
         )
     }
 
-    override fun getTask(id: Long, callback: ICraterClient.TaskCallback): Job {
+    override fun getTask(id: Long, callback: ICraterClient.TaskCallback, onError: ICraterClient.ExceptionCallback): Job {
         return this.task.getById(
             id,
             onRead = {
                 callback.onTask(it)
             },
-            onError = { throw CraterException(it) }
+            onError = { onError.onError(CraterException(it)) }
         )
     }
 
-    override fun getAllTasks(callback: ICraterClient.TaskListCallback): Job {
+    override fun getAllTasks(callback: ICraterClient.TaskListCallback, onError: ICraterClient.ExceptionCallback): Job {
         return this.task.getAll(
             onRead = {
                 callback.onTaskList(it)
             },
-            onError = { throw CraterException(it) }
+            onError = { onError.onError(CraterException(it)) }
         )
     }
 
-    override fun removeTask(id: Long, callback: ICraterClient.BooleanCallback): Job {
+    override fun removeTask(id: Long, callback: ICraterClient.BooleanCallback, onError: ICraterClient.ExceptionCallback): Job {
         return this.task.delete(
             id,
             onFinished = {
                 callback.onCompleted(it)
             },
-            onError = { throw CraterException(it) }
+            onError = { onError.onError(CraterException(it)) }
         )
     }
 
-    override fun uploadTelemetrieReport(report: TelemetrieReport, callback: ICraterClient.BooleanCallback): Job {
+    override fun uploadTelemetrieReport(report: TelemetrieReport, callback: ICraterClient.BooleanCallback, onError: ICraterClient.ExceptionCallback): Job {
         return telemetrie.startUpload(
             report,
             onFinished = {
                 callback.onCompleted(true)
             },
-            onError = { throw CraterException(it) }
+            onError = { onError.onError(CraterException(it)) }
         )
     }
 

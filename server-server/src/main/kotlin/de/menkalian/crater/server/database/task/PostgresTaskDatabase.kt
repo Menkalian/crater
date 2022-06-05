@@ -4,7 +4,6 @@ import de.menkalian.crater.data.task.Category
 import de.menkalian.crater.data.task.ChangeLog
 import de.menkalian.crater.data.task.Language
 import de.menkalian.crater.data.task.Task
-import de.menkalian.crater.server.database.DatabaseHelper
 import de.menkalian.crater.server.database.shared.MetaDataAwareDatabaseExtension
 import de.menkalian.crater.server.database.task.dao.AttributeData
 import de.menkalian.crater.server.database.task.dao.CategoryData
@@ -56,7 +55,6 @@ class PostgresTaskDatabase(
     init {
         File(databaseName).mkdirs()
 
-        DatabaseHelper.createDatabase(databaseName, databaseHost, databasePort, databaseUsername, databasePassword)
         dbConnection = Database.connect(
             "jdbc:postgresql://$databaseHost:$databasePort/$databaseName",
             driver = "org.postgresql.Driver",
@@ -205,11 +203,6 @@ class PostgresTaskDatabase(
                     return@transaction
                 }
 
-                val dbg = TaskData
-                    .select {
-                        TaskData.createdAt.between(oldVersionObject.begin, timestamp) or
-                                TaskData.removedAt.between(oldVersionObject.begin, timestamp)
-                    }.toList()
                 // If no data was changed we do not need a new version
                 if (TaskData
                         .select {
