@@ -12,6 +12,7 @@ plugins {
 keygen {
     create("default") {
         generator.set(de.menkalian.vela.gradle.KeygenExtension.Generator.KOTLIN)
+        sourceDir.set(File(projectDir.absolutePath + "src/commonMain/keygen"))
     }
 }
 

@@ -8,7 +8,6 @@ include(
 // Shared
 include(
     ":shared-data",
-    ":shared-utils",
 )
 
 // Frontend

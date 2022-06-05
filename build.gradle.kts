@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 plugins {
     // Kotlin
-    val kotlinVersion = "1.6.10"
+    val kotlinVersion = "1.6.21"
 
     kotlin("jvm") version kotlinVersion apply false
     kotlin("multiplatform") version kotlinVersion apply false
@@ -92,21 +92,6 @@ allprojects {
         dependencies.add("dokkaHtmlPlugin", "org.jetbrains.dokka:kotlin-as-java-plugin:1.4.32")
     }
 
-    pluginManager.withPlugin("jacoco") {
-        tasks.withType(JacocoReport::class.java) {
-            dependsOn(tasks.getByName("test"))
-
-            reports {
-                xml.required.set(true)
-                csv.required.set(true)
-            }
-        }
-
-        tasks.getByName("check") {
-            dependsOn(tasks.withType(JacocoReport::class.java))
-        }
-    }
-
     pluginManager.withPlugin("maven-publish") {
         extensions.getByType(PublishingExtension::class.java).apply {
             repositories {
@@ -130,7 +115,7 @@ allprojects {
                 dokkaSourceSets.named("main") {
                     sourceLink {
                         localDirectory.set(project.file("src/main/kotlin"))
-                        remoteUrl.set(uri("https://github.com/menkalian/draco/blob/main/${projectDir.relativeTo(rootProject.projectDir)}/src/main/kotlin").toURL())
+                        remoteUrl.set(uri("https://github.com/menkalian/crater/blob/main/${projectDir.relativeTo(rootProject.projectDir)}/src/main/kotlin").toURL())
                         remoteLineSuffix.set("#L")
                     }
                 }
