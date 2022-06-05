@@ -245,7 +245,7 @@ class PostgresTaskDatabase(
                     patchObj.removedIds.forEach {
                         VersionPatchItemData.VersionPatchItemDataEntry
                             .new {
-                                this.add = true
+                                this.add = false
                                 this.task = TaskData.TaskDataEntry[it]
                                 this.patch = patch
                             }
