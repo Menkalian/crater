@@ -5,6 +5,7 @@ import de.menkalian.crater.restclient.logger.StdoutLogger
 import io.ktor.client.features.logging.DEFAULT
 import io.ktor.client.features.logging.LogLevel
 
+@Suppress("unused")
 data class CraterClientConfiguration(
     val useHttps: Boolean,
     val serverUrl: String,
