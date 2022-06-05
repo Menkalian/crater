@@ -21,7 +21,6 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.max
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -231,7 +230,8 @@ class PostgresTaskDatabase(
 
                 if (newVersionObject.id.value % patchArchiveSize == 0L) {
                     val patchesBuiltUntil = VersionData.VersionDataEntry
-                        .find { VersionData.id.eq(VersionPatchData.to.max()) }
+                        .find { VersionData.id.eq(VersionPatchData.VersionPatchDataEntry.all()
+                                                      .maxOfOrNull { it.to.id.value } ?: 1L) }
                         .first()
                     val patchObj = buildPatch(patchesBuiltUntil.id.value, newVersionObject.id.value)
 

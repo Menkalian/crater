@@ -10,9 +10,9 @@ import java.util.concurrent.TimeUnit
 class ScheduledVersionUpdateService(
     private val taskDatabase: ITaskDatabase
 ) {
-    @Scheduled(fixedRate = 1, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(fixedRate = 60, timeUnit = TimeUnit.MINUTES)
     fun updateDatabaseVersion() {
-        logger().debug("Updating content version in database")
+        logger().error("Updating content version in database")
         taskDatabase.updateVersion()
     }
 }
