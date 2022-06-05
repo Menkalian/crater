@@ -38,14 +38,6 @@ kotlin {
                 implementation(ktor("client-curl"))
             }
         }
-//        val jvmExamplesMain by getting {
-//            dependsOn(jvmMain)
-//            kotlin.srcDir("src/examples/kotlin")
-//
-//            dependencies {
-//                implementation("ch.qos.logback:logback-classic:1.2.10")
-//            }
-//        }
     }
 }
 

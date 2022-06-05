@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 plugins {
     // Kotlin
-    val kotlinVersion = "1.6.21"
+    val kotlinVersion = "1.6.10"
 
     kotlin("jvm") version kotlinVersion apply false
     kotlin("multiplatform") version kotlinVersion apply false
@@ -86,10 +86,6 @@ allprojects {
                 }
             }
         }
-    }
-
-    pluginManager.withPlugin("org.jetbrains.dokka") {
-        dependencies.add("dokkaHtmlPlugin", "org.jetbrains.dokka:kotlin-as-java-plugin:1.4.32")
     }
 
     pluginManager.withPlugin("maven-publish") {

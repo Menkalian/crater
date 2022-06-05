@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.6.3"
+    id("org.springframework.boot") version "2.7.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 
     kotlin("jvm")
@@ -13,7 +13,6 @@ plugins {
     id("de.menkalian.vela.keygen")
 
     `maven-publish`
-    jacoco
 }
 
 springBoot {
@@ -63,10 +62,6 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
     }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
 
 publishing {
