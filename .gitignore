@@ -4,6 +4,7 @@ local.properties
 
 **/.data
 **/.logs
+**/.reports
 **/.sqlite
 
 .idea
