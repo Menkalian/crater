@@ -20,7 +20,6 @@ kotlin {
                 implementation(ktor("client-websockets"))
 
                 implementation(project(":shared-data"))
-                implementation(project(":shared-utils"))
             }
         }
         val jsMain by getting {
