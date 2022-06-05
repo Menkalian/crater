@@ -13,11 +13,11 @@ plugins {
 
     id("org.jetbrains.dokka") version kotlinVersion
 
-    id("de.menkalian.vela.keygen") version "2.0.0" apply false
+    id("de.menkalian.vela.keygen") version "2.0.1" apply false
 }
 
 allprojects {
-    group = "de.menkalian.draco"
+    group = "de.menkalian.crater"
     version = "1.0.0"
 
     repositories {

@@ -1,0 +1,18 @@
+Crater
+  Build
+    Version
+    Timestamp
+  Database
+    Type
+    Version
+    Timestamp
+    CreatedAt
+    Task
+      Content
+        Version
+  Telemetrie
+    Report
+      Author
+        Name
+        Email
+      Message

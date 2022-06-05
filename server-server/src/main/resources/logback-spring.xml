@@ -76,19 +76,19 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="de.menkalian.draco.server.game" level="trace">
+    <logger name="crater.server.game" level="trace">
         <appender-ref ref="FILE-GAME"/>
     </logger>
-    <logger name="de.menkalian.draco.server.game.quizpoker.messaging" level="trace">
+    <logger name="crater.server.game.quizpoker.messaging" level="trace">
         <appender-ref ref="FILE-COM"/>
     </logger>
-    <logger name="de.menkalian.draco.server.socket" level="trace">
+    <logger name="crater.server.socket" level="trace">
         <appender-ref ref="FILE-COM"/>
     </logger>
-    <logger name="de.menkalian.draco.server.rest" level="trace">
+    <logger name="crater.server.rest" level="trace">
         <appender-ref ref="FILE-COM"/>
     </logger>
-    <logger name="de.menkalian.draco.server.database" level="trace">
+    <logger name="crater.server.database" level="trace">
         <appender-ref ref="FILE-DB"/>
     </logger>
     <logger name="Exposed" level="trace">

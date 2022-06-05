@@ -47,14 +47,16 @@ dependencies {
 
     // Database Drivers
     runtimeOnly("org.xerial:sqlite-jdbc:3.36.0.3")
-    runtimeOnly("org.mariadb.jdbc:mariadb-java-client:3.0.3")
+    runtimeOnly("org.postgresql:postgresql:42.3.6")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 keygen {
-    targetPackage = "de.menkalian.draco.variables"
-    finalLayerAsString = true
+    create("default") {
+        targetPackage.set("de.menkalian.crater.variables")
+        finalLayerAsString.set(true)
+    }
 }
 
 tasks.withType<KotlinCompile> {

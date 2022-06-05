@@ -5,6 +5,14 @@ plugins {
     id("org.jetbrains.dokka")
 
     `maven-publish`
+
+    id("de.menkalian.vela.keygen")
+}
+
+keygen {
+    create("default") {
+        generator.set(de.menkalian.vela.gradle.KeygenExtension.Generator.KOTLIN)
+    }
 }
 
 kotlin {
