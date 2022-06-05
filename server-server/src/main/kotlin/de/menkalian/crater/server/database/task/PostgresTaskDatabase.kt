@@ -2,16 +2,16 @@ package de.menkalian.crater.server.database.task
 
 import de.menkalian.crater.data.task.Category
 import de.menkalian.crater.data.task.ChangeLog
-import de.menkalian.crater.data.task.Task
 import de.menkalian.crater.data.task.Language
+import de.menkalian.crater.data.task.Task
 import de.menkalian.crater.server.database.DatabaseHelper
+import de.menkalian.crater.server.database.shared.MetaDataAwareDatabaseExtension
+import de.menkalian.crater.server.database.task.dao.AttributeData
 import de.menkalian.crater.server.database.task.dao.CategoryData
 import de.menkalian.crater.server.database.task.dao.CategoryData.CategoryDataEntry.Companion.findDao
 import de.menkalian.crater.server.database.task.dao.LanguageData
 import de.menkalian.crater.server.database.task.dao.LanguageData.LanguageDataEntry.Companion.findDao
 import de.menkalian.crater.server.database.task.dao.TaskData
-import de.menkalian.crater.server.database.shared.MetaDataAwareDatabaseExtension
-import de.menkalian.crater.server.database.task.dao.AttributeData
 import de.menkalian.crater.server.database.task.dao.VersionData
 import de.menkalian.crater.server.database.task.dao.VersionPatchData
 import de.menkalian.crater.server.database.task.dao.VersionPatchItemData
@@ -179,7 +179,7 @@ class PostgresTaskDatabase(
         return transaction(dbConnection) {
             createAllTables()
             VersionData
-                .select(VersionData.end.eq(VersionData.selectAll().maxOfOrNull { it[VersionData.id] }?.value ?: 1L))
+                .select(VersionData.id.eq(VersionData.selectAll().maxOfOrNull { it[VersionData.id] }?.value ?: 1L))
                 .firstOrNull()
                 ?.get(VersionData.id)?.value ?: 1L
         }
@@ -206,13 +206,16 @@ class PostgresTaskDatabase(
                     return@transaction
                 }
 
+                val dbg = TaskData
+                    .select {
+                        TaskData.createdAt.between(oldVersionObject.begin, timestamp) or
+                                TaskData.removedAt.between(oldVersionObject.begin, timestamp)
+                    }.toList()
                 // If no data was changed we do not need a new version
                 if (TaskData
                         .select {
-                            TaskData.createdAt.between(oldVersionObject.end, timestamp) or TaskData.removedAt.between(
-                                oldVersionObject.end,
-                                timestamp
-                            )
+                            TaskData.createdAt.between(oldVersionObject.begin, timestamp) or
+                                    TaskData.removedAt.between(oldVersionObject.begin, timestamp)
                         }.none()
                 ) {
                     return@transaction

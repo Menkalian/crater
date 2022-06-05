@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class TaskCrudRestController(private val database: ITaskDatabase) {
     @PutMapping("task")
-    fun createNewTask(task: Task): Task {
+    fun createNewTask(@RequestBody task: Task): Task {
         if (task.difficulty !in 1..10) {
             throw InvalidDataException("Difficulty must be in Range [1;10]")
         }

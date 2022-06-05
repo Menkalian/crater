@@ -88,7 +88,7 @@ class CraterClient(httpClientTemplate: HttpClient, private val configuration: Cr
             currentDatabaseVersion,
             targetVersion,
             onRead = { changes ->
-                callback.onChanges(changes.maxOf { it.newVersion }, changes)
+                callback.onChanges(changes.maxOfOrNull { it.newVersion } ?: 1, changes)
             },
             onError = { throw CraterException(it) }
         )
