@@ -51,7 +51,13 @@ class TaskCrudRestController(private val database: ITaskDatabase) {
         @RequestHeader("targetVersion", defaultValue = "") targetVersion: String
     ): List<ChangeLog> {
         val startVersionL = startVersion.toLongOrNull() ?: 1L
-        val targetVersionL = targetVersion.toLongOrNull() ?: database.getCurrentVersion()
+        val currentVersion = database.getCurrentVersion()
+        val targetVersionL = targetVersion.toLongOrNull() ?: currentVersion
+
+        if (startVersionL !in 1..currentVersion || targetVersionL !in 1..currentVersion) {
+            throw InvalidDataException("Desired version range invalid")
+        }
+
         return database.getChangeLogs(startVersionL, targetVersionL)
     }
 }
