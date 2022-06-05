@@ -1,8 +1,9 @@
-package de.menkalian.crater.server.rest.guesstimate
+package de.menkalian.crater.server.rest.tasks
 
 import de.menkalian.crater.data.task.ChangeLog
 import de.menkalian.crater.data.task.Task
 import de.menkalian.crater.server.database.task.ITaskDatabase
+import de.menkalian.crater.server.util.InvalidDataException
 import de.menkalian.crater.server.util.NotFoundException
 import de.menkalian.crater.server.util.logger
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController
 class TaskCrudRestController(private val database: ITaskDatabase) {
     @PutMapping("task")
     fun createNewTask(task: Task): Task {
+        if (task.difficulty !in 1..10) {
+            throw InvalidDataException("Difficulty must be in Range [1;10]")
+        }
         logger().debug("Creating new task $task")
         return database.createTask(task)
     }
@@ -26,7 +30,7 @@ class TaskCrudRestController(private val database: ITaskDatabase) {
     }
 
     @GetMapping("task/{id}")
-    fun getAllActiveTasks(@PathVariable("id") id: Long): Task {
+    fun getTask(@PathVariable("id") id: Long): Task {
         return database.getTask(id) ?: throw NotFoundException()
     }
 
@@ -35,12 +39,12 @@ class TaskCrudRestController(private val database: ITaskDatabase) {
         return database.removeTask(id)
     }
 
-    @GetMapping("task/content/version")
+    @GetMapping("version/content")
     fun getCurrentContentVersion(): Long {
         return database.getCurrentVersion()
     }
 
-    @GetMapping("task/patch")
+    @GetMapping("version/patch")
     fun getChangeLog(
         @RequestHeader("startVersion", defaultValue = "1") startVersion: String,
         @RequestHeader("targetVersion", defaultValue = "") targetVersion: String

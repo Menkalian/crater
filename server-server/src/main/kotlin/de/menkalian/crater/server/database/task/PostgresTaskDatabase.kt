@@ -59,7 +59,7 @@ class PostgresTaskDatabase(
 
         DatabaseHelper.createDatabase(databaseName, databaseHost, databasePort, databaseUsername, databasePassword)
         dbConnection = Database.connect(
-            "jdbc:postgresql://$databaseHost:$databasePort/$databaseName".apply { println(this) },
+            "jdbc:postgresql://$databaseHost:$databasePort/$databaseName",
             driver = "org.postgresql.Driver",
             user = databaseUsername,
             password = databasePassword
@@ -133,23 +133,28 @@ class PostgresTaskDatabase(
     }
 
     override fun getChangeLogs(oldVersion: Long, newVersion: Long): List<ChangeLog> {
-        val changeLogs = VersionPatchData.VersionPatchDataEntry
-            .find { VersionPatchData.from.greaterEq(oldVersion) and VersionPatchData.to.lessEq(newVersion) }
-            .map { it.toChangeLogObject() }
-            .toMutableList()
+        ensureOpen()
+        return transaction(dbConnection) {
+            createAllTables()
 
-        val minCachedId = changeLogs
-            .minOf { it.oldVersion }
-        if (minCachedId != oldVersion) {
-            changeLogs.add(0, buildPatch(oldVersion, minCachedId))
-        }
-        val maxCachedId = changeLogs
-            .maxOf { it.newVersion }
-        if (maxCachedId != newVersion) {
-            changeLogs.add(buildPatch(maxCachedId, newVersion))
-        }
+            val changeLogs = VersionPatchData.VersionPatchDataEntry
+                .find { VersionPatchData.from.greaterEq(oldVersion) and VersionPatchData.to.lessEq(newVersion) }
+                .map { it.toChangeLogObject() }
+                .toMutableList()
 
-        return changeLogs
+            val minCachedId = changeLogs
+                .minOfOrNull { it.oldVersion } ?: 1
+            if (minCachedId != oldVersion) {
+                changeLogs.add(0, buildPatch(oldVersion, minCachedId))
+            }
+            val maxCachedId = changeLogs
+                .maxOfOrNull { it.newVersion } ?: 1
+            if (maxCachedId != newVersion) {
+                changeLogs.add(buildPatch(maxCachedId, newVersion))
+            }
+
+            changeLogs
+        }
     }
 
     override fun removeTask(id: Long): Boolean {
