@@ -17,27 +17,16 @@
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
-    <appender name="FILE-DRACO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="FILE-CRATER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder>
             <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
-        <file>${LOG_PATH}/Draco.log</file>
+        <file>${LOG_PATH}/Crater.log</file>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/Draco.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
-            <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
-            <maxHistory>${LOG_FILE_MAX_HISTORY:-0}</maxHistory>
-        </rollingPolicy>
-    </appender>
-    <appender name="FILE-GAME" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
-        </encoder>
-        <file>${LOG_PATH}/Game.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/Game.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
             <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
             <maxHistory>${LOG_FILE_MAX_HISTORY:-0}</maxHistory>
         </rollingPolicy>
@@ -76,19 +65,10 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="crater.server.game" level="trace">
-        <appender-ref ref="FILE-GAME"/>
-    </logger>
-    <logger name="crater.server.game.quizpoker.messaging" level="trace">
+    <logger name="de.menkalian.crater.server.rest" level="trace">
         <appender-ref ref="FILE-COM"/>
     </logger>
-    <logger name="crater.server.socket" level="trace">
-        <appender-ref ref="FILE-COM"/>
-    </logger>
-    <logger name="crater.server.rest" level="trace">
-        <appender-ref ref="FILE-COM"/>
-    </logger>
-    <logger name="crater.server.database" level="trace">
+    <logger name="de.menkalian.crater.server.database" level="trace">
         <appender-ref ref="FILE-DB"/>
     </logger>
     <logger name="Exposed" level="trace">
@@ -100,6 +80,6 @@
 
     <root level="info">
         <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE-DRACO" />
+        <appender-ref ref="FILE-CRATER" />
     </root>
 </configuration>

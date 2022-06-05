@@ -12,7 +12,7 @@ class ScheduledVersionUpdateService(
 ) {
     @Scheduled(fixedRate = 60, timeUnit = TimeUnit.MINUTES)
     fun updateDatabaseVersion() {
-        logger().error("Updating content version in database")
+        logger().debug("Updating content version in database")
         taskDatabase.updateVersion()
     }
 }
