@@ -11,7 +11,7 @@
     }
   ],
   "info" : {
-    "description" : "`crater` is a to manage the data for a \"party\"-Application.\nThe main purpose of the backend is managing the database and data versions.\n\nThe project also provides a `client-baseclient`-module which compiles to JVM, JS and native code, so you can use it directly in your applications.",
+    "description" : "`crater` is a backend application to manage the data for a \"party\"-Application.\nThe main purpose of the backend is managing the database and data versions.\n\nThe project also provides a `client-baseclient`-module which compiles to JVM, JS and native code, so you can use it directly in your applications.",
     "version" : "1.0.0",
     "title" : "Crater",
     "license" : {
