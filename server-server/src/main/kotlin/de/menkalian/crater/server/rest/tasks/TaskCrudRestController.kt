@@ -58,6 +58,13 @@ class TaskCrudRestController(private val database: ITaskDatabase) {
             throw InvalidDataException("Desired version range invalid")
         }
 
+        if (startVersionL > targetVersionL) {
+            throw InvalidDataException("Negative version range")
+        }
+
+        if (startVersionL == targetVersionL)
+            return listOf()
+
         return database.getChangeLogs(startVersionL, targetVersionL)
     }
 }

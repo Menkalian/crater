@@ -139,16 +139,21 @@ class PostgresTaskDatabase(
                 .map { it.toChangeLogObject() }
                 .toMutableList()
 
-            val minCachedId = changeLogs
-                .minOfOrNull { it.oldVersion } ?: 1
-            if (minCachedId != oldVersion) {
-                changeLogs.add(0, buildPatch(oldVersion, minCachedId))
+            if (changeLogs.isEmpty()) {
+                changeLogs.add(buildPatch(oldVersion, newVersion))
+            } else {
+                val minCachedId = changeLogs
+                    .minOf { it.oldVersion }
+                if (minCachedId != oldVersion) {
+                    changeLogs.add(0, buildPatch(oldVersion, minCachedId))
+                }
+                val maxCachedId = changeLogs
+                    .maxOf { it.newVersion }
+                if (maxCachedId != newVersion) {
+                    changeLogs.add(buildPatch(maxCachedId, newVersion))
+                }
             }
-            val maxCachedId = changeLogs
-                .maxOfOrNull { it.newVersion } ?: 1
-            if (maxCachedId != newVersion) {
-                changeLogs.add(buildPatch(maxCachedId, newVersion))
-            }
+
 
             changeLogs
         }
@@ -223,8 +228,10 @@ class PostgresTaskDatabase(
 
                 if (newVersionObject.id.value % patchArchiveSize == 0L) {
                     val patchesBuiltUntil = VersionData.VersionDataEntry
-                        .find { VersionData.id.eq(VersionPatchData.VersionPatchDataEntry.all()
-                                                      .maxOfOrNull { it.to.id.value } ?: 1L) }
+                        .find {
+                            VersionData.id.eq(VersionPatchData.VersionPatchDataEntry.all()
+                                                  .maxOfOrNull { it.to.id.value } ?: 1L)
+                        }
                         .first()
                     val patchObj = buildPatch(patchesBuiltUntil.id.value, newVersionObject.id.value)
 
