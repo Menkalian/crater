@@ -1,5 +1,8 @@
 package de.menkalian.crater.data.task
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class Gimmick {
     ADDITIONAL_PUNISHMENT,
     ADDITIONAL_QUESTION,
