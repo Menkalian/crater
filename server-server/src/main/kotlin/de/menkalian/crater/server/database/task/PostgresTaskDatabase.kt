@@ -167,7 +167,7 @@ class PostgresTaskDatabase(
             val question = TaskData.TaskDataEntry
                 .findById(id)
 
-            if (question != null) {
+            if (question != null && question.removedAt == Long.MAX_VALUE) {
                 question.removedAt = currentUnixSecond()
                 true
             } else {
