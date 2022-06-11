@@ -30,6 +30,7 @@ object TaskData : LongIdTable() {
         var text by TaskData.text
         var severityMultiplier by TaskData.severityMultiplier
 
+        val gimmickTexts by GimmickTextData.GimmickTextDataEntry referrersOn GimmickTextData.task
         val attributes by AttributeData.AttributeDataEntry referrersOn AttributeData.task
 
         fun toTaskObject(): Task {
@@ -42,6 +43,8 @@ object TaskData : LongIdTable() {
                 CategoryData.CategoryDataEntry[category].toEnum(),
                 text,
                 severityMultiplier,
+
+                gimmickTexts.associate { it.key.toEnum() to it.value },
                 attributes.associate { it.key to it.value }
             )
         }

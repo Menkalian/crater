@@ -2,12 +2,16 @@ package de.menkalian.crater.server.database.task
 
 import de.menkalian.crater.data.task.Category
 import de.menkalian.crater.data.task.ChangeLog
+import de.menkalian.crater.data.task.Gimmick
 import de.menkalian.crater.data.task.Language
 import de.menkalian.crater.data.task.Task
 import de.menkalian.crater.server.database.shared.MetaDataAwareDatabaseExtension
 import de.menkalian.crater.server.database.task.dao.AttributeData
 import de.menkalian.crater.server.database.task.dao.CategoryData
 import de.menkalian.crater.server.database.task.dao.CategoryData.CategoryDataEntry.Companion.findDao
+import de.menkalian.crater.server.database.task.dao.GimmickData
+import de.menkalian.crater.server.database.task.dao.GimmickData.GimmickDataEntry.Companion.findDao
+import de.menkalian.crater.server.database.task.dao.GimmickTextData
 import de.menkalian.crater.server.database.task.dao.LanguageData
 import de.menkalian.crater.server.database.task.dao.LanguageData.LanguageDataEntry.Companion.findDao
 import de.menkalian.crater.server.database.task.dao.TaskData
@@ -71,6 +75,7 @@ class PostgresTaskDatabase(
 
     private fun initEnums() {
         ensureOpen()
+        initEnumDatabase(dbConnection, GimmickData, Gimmick.values().map { it.name })
         initEnumDatabase(dbConnection, CategoryData, Category.values().map { it.name })
         initEnumDatabase(dbConnection, LanguageData, Language.values().map { it.name })
     }
@@ -92,6 +97,15 @@ class PostgresTaskDatabase(
                     this.text = task.text
                     this.severityMultiplier = task.severityMultiplier
                 }
+
+            task.gimmickTexts.forEach {
+                GimmickTextData.GimmickTextDataEntry
+                    .new {
+                        this.task = daoTask
+                        this.key = it.key.findDao()
+                        this.value = it.value
+                    }
+            }
 
             task.attributes.forEach {
                 AttributeData.AttributeDataEntry
@@ -290,7 +304,7 @@ class PostgresTaskDatabase(
     }
 
     private fun createAllTables() {
-        SchemaUtils.create(CategoryData, LanguageData, TaskData, AttributeData, VersionData, VersionPatchData, VersionPatchItemData)
+        SchemaUtils.create(CategoryData, LanguageData, TaskData, AttributeData, VersionData, VersionPatchData, VersionPatchItemData, GimmickData)
     }
 
     override fun close() {
