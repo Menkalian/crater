@@ -304,7 +304,7 @@ class PostgresTaskDatabase(
     }
 
     private fun createAllTables() {
-        SchemaUtils.create(CategoryData, LanguageData, TaskData, AttributeData, VersionData, VersionPatchData, VersionPatchItemData, GimmickData)
+        SchemaUtils.create(CategoryData, LanguageData, TaskData, AttributeData, VersionData, VersionPatchData, VersionPatchItemData, GimmickData, GimmickTextData)
     }
 
     override fun close() {

@@ -16,6 +16,6 @@ data class Task(
     val text: String,
     val severityMultiplier: Double,
 
-    val gimmickTexts: Map<Gimmick, String>,
+    val gimmickTexts: Map<Gimmick, String> = mapOf(),
     val attributes: Map<String, String>
 )
